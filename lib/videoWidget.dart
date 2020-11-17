@@ -8,19 +8,29 @@ class VideoWidget extends StatefulWidget {
 }
 
 class _VideoWidgetState extends State<VideoWidget> {
+
   VideoPlayerController _videoPlayerController;
   ChewieController _chewieController;
 
   @override
   void initState() {
     super.initState();
+  }
+
+  Future<bool> _config() async{
     _videoPlayerController = VideoPlayerController.network(
         'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4');
+
+    await _videoPlayerController.initialize();
+
     _chewieController = ChewieController(
       videoPlayerController: _videoPlayerController,
       aspectRatio: 3 / 2,
-      autoInitialize: true,
+      autoPlay: true,
+      looping: true,
     );
+    
+    return true;
   }
 
   @override
@@ -32,8 +42,17 @@ class _VideoWidgetState extends State<VideoWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Chewie(
-      controller: _chewieController,
+
+    return FutureBuilder<bool>(
+      future: _config(),
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        if (snapshot.hasData && snapshot.data) {
+          return Chewie(
+            controller: _chewieController,
+          );
+        }
+        return Center(child: CircularProgressIndicator());
+      }
     );
   }
 }

@@ -38,15 +38,12 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            VideoWidget(),
-            SizedBox(height: 16),
-            YoutubeWidget(youtubeId: '4AoFA19gbLo'),
-          ],
-        ),
+      body: ListView(
+        children: [
+          Center(child: VideoWidget()),
+          SizedBox(height: 16),
+          YoutubeWidget(youtubeId: '4AoFA19gbLo'),
+        ],
       ),
     );
   }
